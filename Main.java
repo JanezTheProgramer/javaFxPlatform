@@ -8,11 +8,10 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 
 public class Main extends Application {
@@ -26,41 +25,53 @@ public class Main extends Application {
         loginStage.setHeight(300);
         loginStage.setWidth(480);
         loginStage.setTitle("Login");
-        Parent loginFormFile = FXMLLoader.load(getClass().getResource("loginForm.fxml"));
-        Scene logScene = new Scene(loginFormFile);
+        Parent logFile = FXMLLoader.load(getClass().getResource("loginForm.fxml"));
+        Scene logScene = new Scene(logFile);
         logScene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
         loginStage.setScene(logScene);
         loginStage.show();
+        Main.createDB();
+    }
+
+    private static void createDB() throws ClassNotFoundException {
+        //get db file
+        try{
+            File database = new File("database.db");
+            boolean makefile = database.createNewFile();
+        }catch (Exception err){
+            System.out.println("file creation error!");
+            //custom error!!!
+        }
+        Class.forName("org.sqlite.JDBC");
+        String[] tables = {""};
+        tables[0] = new StringBuilder()
+                .append("CREATE TABLE IF NOT EXISTS `users`")
+                .append("( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,")
+                .append("`gmail` TEXT NOT NULL,")
+                .append("`pass` TEXT NOT NULL,")
+                .append("`date` BLOB NOT NULL )")
+                .toString();
+        //generate tables if they dont exsist
+        try(Connection conn = DriverManager.getConnection("jdbc:sqlite:database.db");
+            Statement stmt = conn.createStatement()) {
+            try{
+                for(String sql: tables) stmt.execute(sql);
+            }
+            catch(Exception e){/*not valid create table*/}
+        } catch (SQLException e) {
+            //error on base connection
+        }
     }
 
     @FXML
-    private void requireRegisterWindow() throws IOException {
-        Connection conn = null;
-        try
-        {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:test.db");
-            Statement stmt = conn.createStatement();
-            ResultSet rs;
-
-            rs = stmt.executeQuery("SELECT ff FROM users");
-            while ( rs.next() ) {
-                String lastName = rs.getString("ff");
-                System.out.println(lastName);
-            }
-            conn.close();
-
-        }
-        catch(Exception e){
-            System.out.print("Do not connect to DB - Error:"+e);
-        }
+    private void requireRegisterWindow() throws IOException, ClassNotFoundException {
         reqWindow.setHeight(300);
         reqWindow.setWidth(480);
         reqWindow.setTitle("Register");
         reqWindow.initModality(Modality.WINDOW_MODAL);
         reqWindow.initStyle(StageStyle.UNDECORATED);
-        Parent loginFormFile = FXMLLoader.load(getClass().getResource("loginForm.fxml"));
-        Scene reqScene = new Scene(loginFormFile);
+        Parent reqFile = FXMLLoader.load(getClass().getResource("regForm.fxml"));
+        Scene reqScene = new Scene(reqFile);
         reqScene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
         reqWindow.setScene(reqScene);
         reqWindow.show();
