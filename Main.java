@@ -8,9 +8,10 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
 import java.io.File;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 
@@ -33,11 +34,45 @@ public class Main extends Application {
         Main.createDB();
     }
 
+    public void tryLogin(){
+        String sql = new StringBuffer()
+                .append("SELECT id FROM users")
+                .append("WHERE gmail = 'fdsfds' and pass = 'fdsfsd' ")
+                .toString();
+
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:database.db");
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            if(rs.next()){
+                connectToUser(rs.getInt("id"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void connectToUser(int id){
+        System.out.print("kkk");
+    }
+
+
+    public static String hashPassword(String password) throws NoSuchAlgorithmException{
+        MessageDigest md = MessageDigest.getInstance("SHA");
+        md.update(password.getBytes());
+        byte[] b = md.digest();
+        StringBuffer sb = new StringBuffer();
+        for(byte b1 : b){
+            sb.append(Integer.toHexString(b1 & 0xff).toString());
+        }
+        return new StringBuilder(sb.toString()).reverse().toString();
+    }
+
     private static void createDB() throws ClassNotFoundException {
         //get db file
         try{
             File database = new File("database.db");
-            boolean makefile = database.createNewFile();
+            database.createNewFile();
         }catch (Exception err){
             System.out.println("file creation error!");
             //custom error!!!
@@ -64,7 +99,7 @@ public class Main extends Application {
     }
 
     @FXML
-    private void requireRegisterWindow() throws IOException, ClassNotFoundException {
+    private void requireRegisterWindow() throws IOException {
         reqWindow.setHeight(300);
         reqWindow.setWidth(480);
         reqWindow.setTitle("Register");
