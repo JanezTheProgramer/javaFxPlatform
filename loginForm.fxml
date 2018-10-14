@@ -21,8 +21,8 @@
                   <Font size="15.0" />
                </font>
             </PasswordField>
-            <Button alignment="CENTER" layoutX="138.0" layoutY="149.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" text="Login" onAction="#tryLoginMaster"/>
-            <Button alignment="CENTER" layoutX="138.0" layoutY="195.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" text="Create new acc" onAction="#requireRegisterWindow"/>
+            <Button alignment="CENTER" layoutX="138.0" layoutY="149.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" text="Login" onMouseClicked="#tryLoginMaster"/>
+            <Button alignment="CENTER" layoutX="138.0" layoutY="195.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="200.0" text="Create new acc" onMouseClicked="#requireRegisterWindow"/>
       </children>
     </AnchorPane>
   </children>

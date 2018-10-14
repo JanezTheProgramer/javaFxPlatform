@@ -3,6 +3,9 @@ package sample;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class QueryClass {
     public static Boolean loginQuery(String gmail, String pass){
@@ -55,7 +58,7 @@ public class QueryClass {
         }
     }
 
-    public static void createAcc(String gmail, String pass) throws ClassNotFoundException, SQLException, NoSuchAlgorithmException {
+    public static Boolean createAcc(String gmail, String pass) throws ClassNotFoundException, SQLException, NoSuchAlgorithmException {
         Class.forName("org.sqlite.JDBC");
         Connection conn = DriverManager.getConnection("jdbc:sqlite:database.db");
         String sql;
@@ -69,21 +72,28 @@ public class QueryClass {
             ResultSet result    = stmt.executeQuery(sql)){
                 if(result.next()) {
                     //custom error acc already exsits!!!!!
-                    return;
+                    return false;
                 }
                 //exit function above if condition true!!!!
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        sql = "INSERT INTO users (gmail, pass) VALUES ('"+gmail+"', '"+Main.hashPassword(pass)+"')";
+        System.out.println("acc does not exsist yet!!!!");
+        DateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date dateToday = new Date();
+        sql = "INSERT INTO users (gmail, pass) VALUES ('"+gmail+"', '"+Main.hashPassword(pass)+"', '"+ formatDate.format(dateToday)+"')";
         try(Statement stmt = conn.createStatement()) {
             try{
                 stmt.execute(sql);
+                return true;
             }
-            catch(Exception e){/*not valid create table*/}
+            catch(Exception e){
+                return false;
+            }
         } catch (SQLException e) {
-            //error on base connection
+            return false;
+        } finally {
+            conn.close();
         }
-        conn.close();
     }
 }

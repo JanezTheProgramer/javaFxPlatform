@@ -1,12 +1,9 @@
 package sample;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -14,7 +11,7 @@ import java.io.IOException;
 
 public class logFunctions {
 
-    public void tryLoginMaster(ActionEvent actionEvent) throws  NullPointerException {
+    public void tryLoginMaster(MouseEvent mouseEvent) throws  NullPointerException {
         if(QueryClass.loginQuery("neki", "drugo")){
             System.out.print("login sucees");
             //open main platform
@@ -24,7 +21,7 @@ public class logFunctions {
         }
     }
 
-    public void requireRegisterWindow(ActionEvent actionEvent) throws IOException {
+    public void requireRegisterWindow(MouseEvent mouseEvent) throws IOException {
         Stage reqWindow = new Stage();
         reqWindow.setHeight(300);
         reqWindow.setWidth(480);
