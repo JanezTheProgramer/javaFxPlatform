@@ -1,25 +1,30 @@
 package sample;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class logFunctions {
-    public static void loginButton(){
-        String gmail = "ok", pass = "notok";
-        if(QueryClass.tryLogin(gmail,pass)){
-            //launch main window
+
+    public void tryLoginMaster(ActionEvent actionEvent) throws  NullPointerException {
+        if(QueryClass.loginQuery("neki", "drugo")){
+            System.out.print("login sucees");
+            //open main platform
         }else{
+            System.out.print("login fail");
             //custom alert failed to login wrong pass / username!
         }
     }
-    @FXML
-    private void requireRegisterWindow() throws IOException {
+
+    public void requireRegisterWindow(ActionEvent actionEvent) throws IOException {
         Stage reqWindow = new Stage();
         reqWindow.setHeight(300);
         reqWindow.setWidth(480);

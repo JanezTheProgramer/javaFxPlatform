@@ -1,22 +1,31 @@
 package sample;
 
 import java.io.File;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 public class QueryClass {
-    public static Boolean tryLogin(String gmail, String pass){
+    public static Boolean loginQuery(String gmail, String pass){
         String sql = new StringBuffer()
-                .append("SELECT id FROM users").append("WHERE gmail = '").append(gmail).append("' and pass = '").append(pass).append("' ")
+                .append("SELECT id FROM users")
+                .append("WHERE gmail = '")
+                .append(gmail)
+                .append("' and pass = '")
+                .append(pass)
+                .append("' ")
                 .toString();
 
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:database.db");
              Statement stmt  = conn.createStatement();
              ResultSet result    = stmt.executeQuery(sql)){
-                if(!result.next()) return false;
+                if(result.next()) {
+                    conn.close();
+                    return true;
+                }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return true;
+        return false;
     }
 
     public static void createDB() throws ClassNotFoundException {
@@ -40,16 +49,13 @@ public class QueryClass {
         //generate tables if they dont exsist
         try(Connection conn = DriverManager.getConnection("jdbc:sqlite:database.db");
             Statement stmt = conn.createStatement()) {
-            try{
-                for(String sql: tables) stmt.execute(sql);
-            }
-            catch(Exception e){/*not valid create table*/}
+            for(String sql: tables) stmt.execute(sql);
         } catch (SQLException e) {
             //error on base connection
         }
     }
 
-    public static void createAcc(String gmail, String pass) throws ClassNotFoundException, SQLException {
+    public static void createAcc(String gmail, String pass) throws ClassNotFoundException, SQLException, NoSuchAlgorithmException {
         Class.forName("org.sqlite.JDBC");
         Connection conn = DriverManager.getConnection("jdbc:sqlite:database.db");
         String sql;
@@ -57,8 +63,6 @@ public class QueryClass {
                 .append("SELECT id FROM users")
                 .append("WHERE gmail = '")
                 .append(gmail)
-                .append("' and pass = '")
-                .append(pass)
                 .append("' ")
                 .toString();
         try (Statement stmt  = conn.createStatement();
@@ -71,13 +75,7 @@ public class QueryClass {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        sql = new StringBuilder()
-                .append("fd")
-                .append("fds")
-                .append("dfs")
-                .append("fds")
-                .toString();
-
+        sql = "INSERT INTO users (gmail, pass) VALUES ('"+gmail+"', '"+Main.hashPassword(pass)+"')";
         try(Statement stmt = conn.createStatement()) {
             try{
                 stmt.execute(sql);
@@ -86,6 +84,6 @@ public class QueryClass {
         } catch (SQLException e) {
             //error on base connection
         }
-
+        conn.close();
     }
 }

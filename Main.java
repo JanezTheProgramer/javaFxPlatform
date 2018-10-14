@@ -38,7 +38,7 @@ public class Main extends Application {
         byte[] b = md.digest();
         StringBuffer sb = new StringBuffer();
         for(byte b1 : b){
-            sb.append(Integer.toHexString(b1 & 0xff).toString());
+            sb.append(Integer.toHexString(b1 & 0xff));
         }
         return new StringBuilder(sb.toString()).reverse().toString();
     }
