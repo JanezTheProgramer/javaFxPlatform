@@ -12,8 +12,7 @@ public class QueryClass {
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:database.db");
              Statement stmt  = conn.createStatement();
              ResultSet result    = stmt.executeQuery(sql)){
-
-            if(!result.next()) return false;
+                if(!result.next()) return false;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -50,4 +49,43 @@ public class QueryClass {
         }
     }
 
+    public static void createAcc(String gmail, String pass) throws ClassNotFoundException, SQLException {
+        Class.forName("org.sqlite.JDBC");
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:database.db");
+        String sql;
+        sql = new StringBuffer()
+                .append("SELECT id FROM users")
+                .append("WHERE gmail = '")
+                .append(gmail)
+                .append("' and pass = '")
+                .append(pass)
+                .append("' ")
+                .toString();
+        try (Statement stmt  = conn.createStatement();
+            ResultSet result    = stmt.executeQuery(sql)){
+                if(result.next()) {
+                    //custom error acc already exsits!!!!!
+                    return;
+                }
+                //exit function above if condition true!!!!
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        sql = new StringBuilder()
+                .append("fd")
+                .append("fds")
+                .append("dfs")
+                .append("fds")
+                .toString();
+
+        try(Statement stmt = conn.createStatement()) {
+            try{
+                stmt.execute(sql);
+            }
+            catch(Exception e){/*not valid create table*/}
+        } catch (SQLException e) {
+            //error on base connection
+        }
+
+    }
 }
