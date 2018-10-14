@@ -32,13 +32,6 @@ public class Main extends Application {
         Scene logScene = new Scene(logFile);
         logScene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
         loginStage.setScene(logScene);
-        logScene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER) {
-                try {
-                    logFunctions.loginFunc();
-                } catch (Exception ignored) { }
-            }
-        });
         loginStage.show();
         QueryClass.createDB();
     }

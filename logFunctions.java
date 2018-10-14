@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -16,15 +17,21 @@ import java.security.NoSuchAlgorithmException;
 
 public class logFunctions {
 
-    public static PasswordField passField;
-    public static TextField userField;
+    public PasswordField passField;
+    public TextField userField;
 
+    //deez 2 func do the same thing one handles enter one mouse click!
     public void tryLoginMaster(ActionEvent actionEvent) throws NoSuchAlgorithmException {
         loginFunc();
         //call function that does need parameter bcs its called from main.java
     }
+    public void EnterPressedLog(KeyEvent keyEvent) throws NoSuchAlgorithmException {
+        if(keyEvent.getCode() == KeyCode.ENTER){
+            loginFunc();
+        }
+    }
 
-    public static void loginFunc() throws NoSuchAlgorithmException {
+    public void loginFunc() throws NoSuchAlgorithmException {
         if(passField.getText().length() > 0 && userField.getText().length() > 0){
             if(QueryClass.loginQuery(passField.getText(), userField.getText())){
                 System.out.print("login sucees");
@@ -39,7 +46,7 @@ public class logFunctions {
     }
 
 
-    public void requireRegisterWindow(ActionEvent mouseEvent) throws IOException {
+    public void requireRegisterWindow(ActionEvent mouseEvent) throws IOException, NullPointerException {
         Stage reqWindow = new Stage();
         reqWindow.setHeight(300);
         reqWindow.setWidth(480);

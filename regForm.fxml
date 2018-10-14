@@ -9,7 +9,7 @@
 
 <VBox fx:controller="sample.regFunctions" fx:id="regForm" prefHeight="390.0" prefWidth="420.0"
       xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
-    <AnchorPane prefHeight="320.0" prefWidth="420.0" VBox.vgrow="ALWAYS">
+    <AnchorPane prefHeight="320.0" prefWidth="420.0" VBox.vgrow="ALWAYS" onKeyPressed="#EnterPressedReg">
         <TextField fx:id="userText" alignment="CENTER" layoutX="138.0" layoutY="38.0" prefHeight="35.0" prefWidth="200.0"
                    promptText="gmail">
             <font>
