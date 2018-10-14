@@ -8,13 +8,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class QueryClass {
-    public static Boolean loginQuery(String gmail, String pass){
+    public static Boolean loginQuery(String gmail, String pass) throws NoSuchAlgorithmException {
         String sql = new StringBuffer()
                 .append("SELECT id FROM users")
-                .append("WHERE gmail = '")
+                .append(" WHERE gmail = '")
                 .append(gmail)
                 .append("' and pass = '")
-                .append(pass)
+                .append(Main.hashPassword(pass))
                 .append("' ")
                 .toString();
 
@@ -22,7 +22,6 @@ public class QueryClass {
              Statement stmt  = conn.createStatement();
              ResultSet result    = stmt.executeQuery(sql)){
                 if(result.next()) {
-                    conn.close();
                     return true;
                 }
         } catch (SQLException e) {
@@ -78,10 +77,9 @@ public class QueryClass {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        System.out.println("acc does not exsist yet!!!!");
-        DateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        DateFormat formatDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date dateToday = new Date();
-        sql = "INSERT INTO users (gmail, pass) VALUES ('"+gmail+"', '"+Main.hashPassword(pass)+"', '"+ formatDate.format(dateToday)+"')";
+        sql = "INSERT INTO users (gmail, pass, date) VALUES ('"+gmail+"', '"+Main.hashPassword(pass)+"', '"+ formatDate.format(dateToday)+"')";
         try(Statement stmt = conn.createStatement()) {
             try{
                 stmt.execute(sql);

@@ -7,11 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.awt.event.ActionEvent;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -20,6 +23,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage loginStage) throws Exception {
+        ActionEvent event = null;
         loginStage.initStyle(StageStyle.UNDECORATED);
         loginStage.setHeight(300);
         loginStage.setWidth(480);
@@ -28,6 +32,13 @@ public class Main extends Application {
         Scene logScene = new Scene(logFile);
         logScene.getStylesheets().add(Main.class.getResource("style.css").toExternalForm());
         loginStage.setScene(logScene);
+        logScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                try {
+                    logFunctions.loginFunc();
+                } catch (Exception ignored) { }
+            }
+        });
         loginStage.show();
         QueryClass.createDB();
     }
