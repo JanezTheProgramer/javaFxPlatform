@@ -12,6 +12,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
@@ -34,11 +35,11 @@ public class logFunctions {
     public void loginFunc() throws NoSuchAlgorithmException, IOException {
         if(passField.getText().length() > 0 && userField.getText().length() > 0){
             if(QueryClass.loginQuery(passField.getText(), userField.getText())){
-                Alert.CreateAlert("Successfuly logged in!");
+                JOptionPane.showMessageDialog(null, "Login was successfull!");
             }else
-                Alert.CreateAlert("Failed to login!");
+                JOptionPane.showMessageDialog(null, "Failed to login!");
         }else{
-            Alert.CreateAlert("Fill in log data!");
+            JOptionPane.showMessageDialog(null, "Fill the form!");
         }
     }
 

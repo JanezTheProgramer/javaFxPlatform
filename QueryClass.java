@@ -1,5 +1,6 @@
 package sample;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -37,7 +38,7 @@ public class QueryClass {
             File database = new File("database.db");
             database.createNewFile();
         }catch (Exception err){
-            Alert.CreateAlert("Failed to create database!");
+            JOptionPane.showMessageDialog(null, "Failed to create database!");
             //custom error!!!
         }
         Class.forName("org.sqlite.JDBC");
