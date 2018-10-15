@@ -21,27 +21,24 @@ public class logFunctions {
     public TextField userField;
 
     //deez 2 func do the same thing one handles enter one mouse click!
-    public void tryLoginMaster(ActionEvent actionEvent) throws NoSuchAlgorithmException {
+    public void tryLoginMaster(ActionEvent actionEvent) throws NoSuchAlgorithmException, IOException {
         loginFunc();
         //call function that does need parameter bcs its called from main.java
     }
-    public void EnterPressedLog(KeyEvent keyEvent) throws NoSuchAlgorithmException {
+    public void EnterPressedLog(KeyEvent keyEvent) throws NoSuchAlgorithmException, IOException {
         if(keyEvent.getCode() == KeyCode.ENTER){
             loginFunc();
         }
     }
 
-    public void loginFunc() throws NoSuchAlgorithmException {
+    public void loginFunc() throws NoSuchAlgorithmException, IOException {
         if(passField.getText().length() > 0 && userField.getText().length() > 0){
             if(QueryClass.loginQuery(passField.getText(), userField.getText())){
-                System.out.print("login sucees");
-                //open main platform
-            }else{
-                System.out.print("login fail");
-                //custom alert failed to login wrong pass / username!
-            }
+                Alert.CreateAlert("Successfuly logged in!");
+            }else
+                Alert.CreateAlert("Failed to login!");
         }else{
-            //fil in log data
+            Alert.CreateAlert("Fill in log data!");
         }
     }
 

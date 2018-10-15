@@ -28,12 +28,21 @@ public class regFunctions {
         if(userText.getText().length() > 0 && passText.getText().length() > 0 && confText.getText().length() > 0){
             if(passText.getText().equals(confText.getText())){
                 try{
-                    if(QueryClass.createAcc(userText.getText(), confText.getText())){
-                        System.out.println("acc was created");
-                        //custom created acc
-                    }else{
-                        System.out.println("error");
-                        //custom failed to create acc
+                    switch (QueryClass.createAcc(userText.getText(), confText.getText())){
+                        case -1:
+                            System.out.println("runtime error!");
+                            break;
+                        case 0:
+                            System.out.println("created acc");
+                            break;
+                        case 1:
+                            System.out.println("already exsist!");
+                            break;
+                        case 2:
+                            System.out.println("not valid email!");
+                            break;
+                        default:
+                            break;
                     }
 
                 }catch (Exception e){

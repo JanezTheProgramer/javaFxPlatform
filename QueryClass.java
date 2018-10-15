@@ -1,6 +1,7 @@
 package sample;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.text.DateFormat;
@@ -30,13 +31,13 @@ public class QueryClass {
         return false;
     }
 
-    public static void createDB() throws ClassNotFoundException {
+    public static void createDB() throws ClassNotFoundException, IOException {
         //get db file
         try{
             File database = new File("database.db");
             database.createNewFile();
         }catch (Exception err){
-            System.out.println("file creation error!");
+            Alert.CreateAlert("Failed to create database!");
             //custom error!!!
         }
         Class.forName("org.sqlite.JDBC");
@@ -57,13 +58,13 @@ public class QueryClass {
         }
     }
 
-    public static Boolean createAcc(String gmail, String pass) throws ClassNotFoundException, SQLException, NoSuchAlgorithmException {
+    public static int createAcc(String gmail, String pass) throws ClassNotFoundException, SQLException, NoSuchAlgorithmException {
         Class.forName("org.sqlite.JDBC");
         Connection conn = DriverManager.getConnection("jdbc:sqlite:database.db");
         String sql;
         sql = new StringBuffer()
                 .append("SELECT id FROM users")
-                .append("WHERE gmail = '")
+                .append(" WHERE gmail = '")
                 .append(gmail)
                 .append("' ")
                 .toString();
@@ -71,25 +72,22 @@ public class QueryClass {
             ResultSet result    = stmt.executeQuery(sql)){
                 if(result.next()) {
                     //custom error acc already exsits!!!!!
-                    return false;
+                    return 1;
                 }
-                //exit function above if condition true!!!!
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+        if(!gmail.matches("^[a-z0-9](\\.?[a-z0-9]){5,}@g(oogle)?mail\\.com$")) {
+            return 2;
         }
         DateFormat formatDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date dateToday = new Date();
         sql = "INSERT INTO users (gmail, pass, date) VALUES ('"+gmail+"', '"+Main.hashPassword(pass)+"', '"+ formatDate.format(dateToday)+"')";
         try(Statement stmt = conn.createStatement()) {
-            try{
-                stmt.execute(sql);
-                return true;
-            }
-            catch(Exception e){
-                return false;
-            }
+            stmt.execute(sql);
+            return 0;
         } catch (SQLException e) {
-            return false;
+            return -1;
         } finally {
             conn.close();
         }
